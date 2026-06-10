@@ -11,7 +11,7 @@ st.set_page_config(
 
 # --- ESPAÇO PARA ANÚNCIO 1 (Barra Lateral) ---
 with st.sidebar:
-    st.title("Configurações")
+    st.title("⚙️ Configurações")
 
     # Bloco reservado para monetização
     anuncio_sidebar = st.container()
@@ -23,8 +23,9 @@ with st.sidebar:
     # Entradas de dados do usuário
     salario_bruto = st.number_input("Salário Bruto (R$)", min_value=0.0, value=2000.0, step=100.0)
 
-    data_adm = st.date_input("Data de Admissão", value=datetime(2023, 1, 1))
-    data_dem = st.date_input("Data de Demissão", value=datetime(2024, 6, 1))
+    # AJUSTE VISUAL: Formato de data alterado para o padrão brasileiro (DD/MM/YYYY)
+    data_adm = st.date_input("Data de Admissão", value=datetime(2025, 8, 5), format="DD/MM/YYYY")
+    data_dem = st.date_input("Data de Demissão", value=datetime(2026, 4, 10), format="DD/MM/YYYY")
 
     tipo_desligamento = st.selectbox(
         "Tipo de Desligamento",
