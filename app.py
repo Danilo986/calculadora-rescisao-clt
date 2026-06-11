@@ -6,7 +6,8 @@ from calculos import processar_rescisao, calcular_seguro_desemprego
 st.set_page_config(
     page_title="Calculadora de Rescisão CLT",
     page_icon="📊",
-    layout="centered"
+    layout="centered",
+    disable_iframe_parents=True
 )
 st.markdown(
     """
