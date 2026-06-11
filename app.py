@@ -9,18 +9,18 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- ESPAÇO PARA ANÚNCIO 1 (Barra Lateral) ---
+# --- BARRA LATERAL (Apenas Navegação e Anúncio Fixo) ---
 with st.sidebar:
     st.title("⚙️ Painel")
 
-    # Sistema de navegação atualizado com a nova funcionalidade
+    # Sistema de navegação
     aba_selecionada = st.radio(
         "Navegação",
         ["🧮 Calculadora", "💰 Seguro-Desemprego", "📄 Política de Privacidade"]
     )
     st.write("---")
 
-    # Bloco reservado para monetização (Simulação de Banner Lateral)
+    # Bloco reservado para monetização lateral
     anuncio_sidebar = st.container()
     with anuncio_sidebar:
         st.caption("⚡ Patrocínio / Espaço AdSense")
@@ -37,23 +37,31 @@ with st.sidebar:
 
 # --- CONTEÚDO DA ABA: CALCULADORA ---
 if aba_selecionada == "🧮 Calculadora":
-    with st.sidebar:
-        st.subheader("Dados do Cálculo")
-        salario_bruto = st.number_input("Salário Bruto (R$)", min_value=0.0, value=2000.0, step=100.0)
-
-        # Mantendo as datas exatamente como você configurou e organizou
-        data_adm = st.date_input("Data de Admissão", value=datetime(2025, 8, 5), format="DD/MM/YYYY")
-        data_dem = st.date_input("Data de Demissão", value=datetime(2026, 4, 10), format="DD/MM/YYYY")
-
-        tipo_desligamento = st.selectbox(
-            "Tipo de Desligamento",
-            options=["Sem Justa Causa", "Com Justa Causa", "Pedido de Demissao", "Acordo"]
-        )
-        saldo_fgts = st.number_input("Saldo do FGTS para Fins Rescisórios (R$)", min_value=0.0, value=3000.0,
-                                     step=100.0)
-
     st.title("📊 Calculadora de Rescisão Trabalhista (CLT)")
     st.write("Calcule rapidamente os valores estimados para a sua rescisão contratual de forma simples e precisa.")
+    st.write("---")
+
+    # CAMPOS DE ENTRADA NO CORPO PRINCIPAL (Não ficam mais escondidos na lateral)
+    st.subheader("📋 Dados do Cálculo")
+
+    # Organizando os campos em colunas para ocupar menos espaço vertical
+    col_inputs1, col_inputs2 = st.columns(2)
+
+    with col_inputs1:
+        salario_bruto = st.number_input("Salário Bruto (R$)", min_value=0.0, value=2000.0, step=100.0)
+        data_adm = st.date_input("Data de Admissão", value=datetime(2025, 8, 5), format="DD/MM/YYYY")
+
+    with col_inputs2:
+        saldo_fgts = st.number_input("Saldo do FGTS para Fins Rescisórios (R$)", min_value=0.0, value=3000.0,
+                                     step=100.0)
+        data_dem = st.date_input("Data de Demissão", value=datetime(2026, 4, 10), format="DD/MM/YYYY")
+
+    tipo_desligamento = st.selectbox(
+        "Tipo de Desligamento",
+        options=["Sem Justa Causa", "Com Justa Causa", "Pedido de Demissao", "Acordo"]
+    )
+
+    st.write("---")
 
     if data_dem < data_adm:
         st.error("Erro: A data de demissão não pode ser anterior à data de admissão.")
@@ -86,7 +94,7 @@ if aba_selecionada == "🧮 Calculadora":
             st.caption(
                 "*Nota: Este cálculo é uma estimativa e não substitui o documento oficial de rescisão da empresa (TRCT).")
 
-    # --- SEÇÃO FAQ PARA SEO (CALCULADORA) ---
+    # --- SEÇÃO FAQ PARA SEO ---
     st.write("---")
     st.subheader("❓ Dúvidas Frequentes sobre Rescisão Trabalhista")
 
@@ -111,13 +119,24 @@ if aba_selecionada == "🧮 Calculadora":
 
 # --- CONTEÚDO DA ABA: SEGURO-DESEMPREGO ---
 elif aba_selecionada == "💰 Seguro-Desemprego":
-    with st.sidebar:
-        st.subheader("Dados da Simulação")
+    st.title("💰 Simulador de Seguro-Desemprego (Regras 2026)")
+    st.write("Verifique se você cumpre os critérios de carência e descubra o valor estimado das suas parcelas.")
+    st.write("---")
+
+    # CAMPOS DE ENTRADA NO CORPO PRINCIPAL
+    st.subheader("📋 Dados da Simulação")
+
+    col_seg1, col_seg2 = st.columns(2)
+
+    with col_seg1:
         solicitacao = st.selectbox(
             "Número da Solicitação",
             options=[1, 2, 3],
             format_func=lambda x: f"{x}ª vez que solicito"
         )
+        media_salario = st.number_input("Salário Médio (R$)", min_value=0.0, value=2000.0, step=100.0)
+
+    with col_seg2:
         meses = st.number_input(
             "Meses Trabalhados (Último Emprego)",
             min_value=1,
@@ -125,13 +144,8 @@ elif aba_selecionada == "💰 Seguro-Desemprego":
             value=12,
             step=1
         )
-        st.write("---")
-        st.subheader("Média Salarial")
-        st.caption("Média dos seus 3 últimos salários brutos.")
-        media_salario = st.number_input("Salário Médio (R$)", min_value=0.0, value=2000.0, step=100.0)
 
-    st.title("💰 Simulador de Seguro-Desemprego (Regras 2026)")
-    st.write("Verifique se você cumpre os critérios de carência e descubra o valor estimado das suas parcelas.")
+    st.write("---")
 
     if st.button("Simular Benefício", type="primary", use_container_width=True):
         resultado = calcular_seguro_desemprego(
@@ -154,7 +168,7 @@ elif aba_selecionada == "💰 Seguro-Desemprego":
         else:
             st.error(f"❌ Não elegível: {resultado['motivo']}")
 
-    # --- SEÇÃO FAQ PARA SEO (SEGURO-DESEMPREGO) ---
+    # --- SEÇÃO FAQ PARA SEO ---
     st.write("---")
     st.subheader("❓ Dúvidas Frequentes sobre o Seguro-Desemprego")
 
@@ -174,7 +188,7 @@ elif aba_selecionada == "💰 Seguro-Desemprego":
         Com os reajustes do Ministério do Trabalho para o ano de 2026, o valor máximo que um trabalhador pode receber por parcela é de **R$ 2.518,65**, mesmo que a média salarial dos últimos meses tenha sido muito maior.
         """)
 
-# --- CONTEÚDO DA ABA: POLÍTICA DE PRIVACIDADE (GOOGLE) ---
+# --- CONTEÚDO DA ABA: POLÍTICA DE PRIVACIDADE ---
 elif aba_selecionada == "📄 Política de Privacidade":
     st.title("📄 Política de Privacidade")
     st.write(f"Atualizado em: {datetime.now().strftime('%d/%m/%Y')}")
@@ -196,7 +210,6 @@ elif aba_selecionada == "📄 Política de Privacidade":
         """
     )
 
-# --- ESPAÇO PARA ANÚNCIO 2 (Rodapé) ---
 # --- ESPAÇO PARA ANÚNCIO 2 (Rodapé) ---
 st.write("---")
 anuncio_rodape = st.container()
