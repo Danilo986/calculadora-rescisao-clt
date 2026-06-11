@@ -2,13 +2,13 @@ import streamlit as st
 from datetime import datetime
 from calculos import processar_rescisao, calcular_seguro_desemprego
 
-# Configuração da página para alta performance e responsividade
+# Configuração da página limpa e correta
 st.set_page_config(
     page_title="Calculadora de Rescisão CLT",
     page_icon="📊",
-    layout="centered",
-    disable_iframe_parents=True
+    layout="centered"
 )
+
 st.markdown(
     """
     <style>
