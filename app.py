@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime
-from calculos import processar_rescisao
+from calculos import processar_rescisao, calcular_seguro_desemprego
 
 # Configuração da página para alta performance e responsividade
 st.set_page_config(
@@ -13,8 +13,11 @@ st.set_page_config(
 with st.sidebar:
     st.title("⚙️ Painel")
 
-    # Sistema de navegação para alternar entre a calculadora e a política
-    aba_selecionada = st.radio("Navegação", ["🧮 Calculadora", "📄 Política de Privacidade"])
+    # Sistema de navegação atualizado com a nova funcionalidade
+    aba_selecionada = st.radio(
+        "Navegação",
+        ["🧮 Calculadora", "💰 Seguro-Desemprego", "📄 Política de Privacidade"]
+    )
     st.write("---")
 
     # Bloco reservado para monetização (Simulação de Banner Lateral)
@@ -83,8 +86,53 @@ if aba_selecionada == "🧮 Calculadora":
             st.caption(
                 "*Nota: Este cálculo é uma estimativa e não substitui o documento oficial de rescisão da empresa (TRCT).")
 
+# --- CONTEÚDO DA ABA: SEGURO-DESEMPREGO ---
+elif aba_selecionada == "💰 Seguro-Desemprego":
+    with st.sidebar:
+        st.subheader("Dados da Simulação")
+        solicitacao = st.selectbox(
+            "Número da Solicitação",
+            options=[1, 2, 3],
+            format_func=lambda x: f"{x}ª vez que solicito"
+        )
+        meses = st.number_input(
+            "Meses Trabalhados (Último Emprego)",
+            min_value=1,
+            max_value=360,
+            value=12,
+            step=1
+        )
+        st.write("---")
+        st.subheader("Média Salarial")
+        st.caption("Média dos seus 3 últimos salários brutos.")
+        media_salario = st.number_input("Salário Médio (R$)", min_value=0.0, value=2000.0, step=100.0)
+
+    st.title("💰 Simulador de Seguro-Desemprego (Regras 2026)")
+    st.write("Verifique se você cumpre os critérios de carência e descubra o valor estimado das suas parcelas.")
+
+    if st.button("Simular Benefício", type="primary", use_container_width=True):
+        resultado = calcular_seguro_desemprego(
+            salario_medio=media_salario,
+            meses_trabalhados=meses,
+            numero_solicitacao=solicitacao
+        )
+
+        if resultado["elegivel"]:
+            st.success("🎉 Você tem direito ao Seguro-Desemprego!")
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric(label="Quantidade de Parcelas", value=f"{resultado['parcelas']} parcelas")
+            with col2:
+                st.metric(label="Valor de Cada Parcela", value=f"R$ {resultado['valor_parcela']:.2f}")
+
+            total_estimado = resultado['parcelas'] * resultado['valor_parcela']
+            st.info(f"**Valor total estimado a receber:** R$ {total_estimado:.2f}")
+        else:
+            st.error(f"❌ Não elegível: {resultado['motivo']}")
+
 # --- CONTEÚDO DA ABA: POLÍTICA DE PRIVACIDADE (GOOGLE) ---
-else:
+elif aba_selecionada == "📄 Política de Privacidade":
     st.title("📄 Política de Privacidade")
     st.write(f"Atualizado em: {datetime.now().strftime('%d/%m/%Y')}")
 
@@ -119,4 +167,5 @@ with anuncio_rodape:
         """,
         unsafe_allow_html=True
     )
+
 

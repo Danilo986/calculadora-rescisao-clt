@@ -102,3 +102,43 @@ def processar_rescisao(
         "multa_fgts": round(multa_fgts, 2),
         "total_geral": round(total_rescindido, 2)
     }
+
+
+def calcular_seguro_desemprego(salario_medio: float, meses_trabalhados: int, numero_solicitacao: int) -> dict:
+    """
+    Calcula a elegibilidade, quantidade de parcelas e valor do seguro-desemprego
+    com base nas regras vigentes e tabela oficial de 2026.
+    """
+    # 1. Verificação de Carência (Elegibilidade)
+    if numero_solicitacao == 1 and meses_trabalhados < 12:
+        return {"elegivel": False,
+                "motivo": "Exige no mínimo 12 meses trabalhados nos últimos 18 meses para a 1ª solicitação."}
+    elif numero_solicitacao == 2 and meses_trabalhados < 9:
+        return {"elegivel": False,
+                "motivo": "Exige no mínimo 9 meses trabalhados nos últimos 12 meses para a 2ª solicitação."}
+    elif numero_solicitacao >= 3 and meses_trabalhados < 6:
+        return {"elegivel": False,
+                "motivo": "Exige no mínimo 6 meses trabalhados imediatamente anteriores à demissão para a 3ª solicitação ou mais."}
+
+    # 2. Definição da Quantidade de Parcelas
+    if 6 <= meses_trabalhados <= 11:
+        parcelas = 3
+    elif 12 <= meses_trabalhados <= 23:
+        parcelas = 4
+    else:
+        parcelas = 5
+
+    # 3. Cálculo do Valor da Parcela (Tabela Oficial de 2026)
+    if salario_medio <= 2222.17:
+        valor = salario_medio * 0.8
+    elif salario_medio <= 3703.99:
+        valor = ((salario_medio - 2222.17) * 0.5) + 1777.74
+    else:
+        valor = 2518.65
+
+    # Garante o piso do salário mínimo vigente em 2026 (R$ 1.621,00)
+    if valor < 1621.00:
+        valor = 1621.00
+
+    return {"elegivel": True, "parcelas": parcelas, "valor_parcela": round(valor, 2)}
+
