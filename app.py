@@ -86,6 +86,29 @@ if aba_selecionada == "🧮 Calculadora":
             st.caption(
                 "*Nota: Este cálculo é uma estimativa e não substitui o documento oficial de rescisão da empresa (TRCT).")
 
+    # --- SEÇÃO FAQ PARA SEO (CALCULADORA) ---
+    st.write("---")
+    st.subheader("❓ Dúvidas Frequentes sobre Rescisão Trabalhista")
+
+    with st.expander("Como é calculado o Saldo de Salário?"):
+        st.write("""
+        O saldo de salário é calculado dividindo o valor do seu salário bruto por 30 
+        (número padrão de dias do mês comercial) e multiplicando pelo número de dias efetivamente 
+        trabalhados no mês da demissão.
+        """)
+
+    with st.expander("Quem tem direito ao Aviso Prévio Proporcional?"):
+        st.write("""
+        De acordo com a Lei 12.506/2011, o aviso prévio começa em 30 dias para quem tem até 1 ano de empresa. 
+        A cada ano completo trabalhado na mesma empresa, são somados mais 3 dias, até o limite máximo de 90 dias (20 anos de trabalho).
+        """)
+
+    with st.expander("O que são os avos profissionais de 13º e Férias?"):
+        st.write("""
+        O trabalhador ganha o direito a 1/12 (um avo) de 13º salário e de férias para cada mês trabalhado. 
+        Para que o mês corrente conte como um mês cheio (um avo), é necessário ter trabalhado pelo menos 15 dias dentro daquele mês civil.
+        """)
+
 # --- CONTEÚDO DA ABA: SEGURO-DESEMPREGO ---
 elif aba_selecionada == "💰 Seguro-Desemprego":
     with st.sidebar:
@@ -131,6 +154,26 @@ elif aba_selecionada == "💰 Seguro-Desemprego":
         else:
             st.error(f"❌ Não elegível: {resultado['motivo']}")
 
+    # --- SEÇÃO FAQ PARA SEO (SEGURO-DESEMPREGO) ---
+    st.write("---")
+    st.subheader("❓ Dúvidas Frequentes sobre o Seguro-Desemprego")
+
+    with st.expander("Qual o intervalo mínimo entre um pedido de Seguro-Desemprego e outro?"):
+        st.write("""
+        A legislação brasileira estabelece que o trabalhador deve respeitar um intervalo mínimo de 
+        **16 meses** entre o início de uma solicitação do benefício e a data de dispensa do novo emprego para ter direito novamente.
+        """)
+
+    with st.expander("Quantos meses preciso trabalhar para pedir o seguro pela 1ª vez?"):
+        st.write("""
+        Para a **primeira solicitação**, você precisa ter trabalhado pelo menos **12 meses** com carteira assinada nos últimos 18 meses anteriores à data de demissão.
+        """)
+
+    with st.expander("Qual o valor máximo (teto) do Seguro-Desemprego em 2026?"):
+        st.write("""
+        Com os reajustes do Ministério do Trabalho para o ano de 2026, o valor máximo que um trabalhador pode receber por parcela é de **R$ 2.518,65**, mesmo que a média salarial dos últimos meses tenha sido muito maior.
+        """)
+
 # --- CONTEÚDO DA ABA: POLÍTICA DE PRIVACIDADE (GOOGLE) ---
 elif aba_selecionada == "📄 Política de Privacidade":
     st.title("📄 Política de Privacidade")
@@ -154,6 +197,7 @@ elif aba_selecionada == "📄 Política de Privacidade":
     )
 
 # --- ESPAÇO PARA ANÚNCIO 2 (Rodapé) ---
+# --- ESPAÇO PARA ANÚNCIO 2 (Rodapé) ---
 st.write("---")
 anuncio_rodape = st.container()
 with anuncio_rodape:
@@ -167,5 +211,3 @@ with anuncio_rodape:
         """,
         unsafe_allow_html=True
     )
-
-
