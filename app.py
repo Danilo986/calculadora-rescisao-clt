@@ -8,6 +8,18 @@ st.set_page_config(
     page_icon="📊",
     layout="centered"
 )
+st.markdown(
+    """
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        .stAppDeployButton {display:none;}
+        .block-container {padding-bottom: 1rem;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # --- BARRA LATERAL (Apenas Navegação e Anúncio Fixo) ---
 with st.sidebar:
